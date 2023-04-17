@@ -51,3 +51,18 @@
 - R - Read = SELECT
 - U - Update = UPDATE
 - D - Delete = DELETE
+
+
+* * map (manipular)
+ex: tags.map(tag => {
+  return{
+  name: tag.name (tá pegando o nome de cada tag)
+  }
+})  ou
+tags.map(tag => {
+  return{
+    ...tag,  (spread)
+    date: new Date()    (vai colocar uma data em cada tag)
+  }
+* * filter (filtrar)
+ex: tags.filter(tag => tag.note_id === 1) (vai filtrar e pegar apenas as tags que estiverem relacionadas exatamente ao note_id = 1)
