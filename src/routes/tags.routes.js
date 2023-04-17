@@ -9,5 +9,4 @@ const tagsController = new TagsController();
 tagsRouter.get("/", tagsController.index);
 
 
-
-module.exports = tagsRouter;
+module.exports = notesRouter;
