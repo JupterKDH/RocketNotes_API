@@ -6,7 +6,7 @@ const tagsRouter = Router();
 
 const tagsController = new TagsController();
 
-tagsRouter.get("/", tagsController.index);
+tagsRouter.get("/:user_id", tagsController.index);
 
 
-module.exports = notesRouter;
+module.exports = tagsRouter;

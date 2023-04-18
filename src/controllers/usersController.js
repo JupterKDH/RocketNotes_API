@@ -5,13 +5,7 @@ const AppError = require("../utils/AppError");
 const sqliteConnection = require("../database/sqlite");
 
 class UsersController {
-  /*
-  * index - GET para listar vários registros.
-  * show - GET para exibir um registro especifico.
-  * create - POST para criar um registro.
-  * update - PUT para atualizar um registro.
-  * delete - DELETE para remover um registro.
-  */
+
   async create(request, response) {
     const { name, email, password } = request.body;
 
@@ -19,7 +13,7 @@ class UsersController {
     const checkUserExist = await database.get("SELECT * FROM users WHERE email = (?)", [email])
 
     if(checkUserExist){
-      throw new AppError("Este email já está cadastrado.");
+      throw new AppError("Este email já está sendo utilizado.");
     }
 
     const hashedPassword = await hash(password, 8);
@@ -30,15 +24,6 @@ class UsersController {
       );
 
     return response.status(201).json();
-
-   /* if(!name){
-      throw new AppError("O campo nome é obrigatório.")
-    }*/
-
-   /* response.send(`
-    Usuário: ${name}. E-mail ${email}. E a senha é: ${password}
-    `);*/
-    //response.status(201).json({name, email, password})// para mandar em formato json
   }
 
   async update(request, response) {
@@ -62,7 +47,7 @@ class UsersController {
     user.email = email ?? user.email;
 
     if(password && !old_password) {
-      throw new AppError("A senha antiga é obrigatória para definir uma nova senha");
+      throw new AppError("A senha antiga é necessária");
     }
 
     if(password && old_password) {

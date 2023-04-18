@@ -15,8 +15,7 @@ function myMiddleware(request, response, next) {
 
 const usersController = new UsersController();
 
-//usersRouter.use(myMiddleware); // para user em todos
-usersRouter.post("/", usersController.create);// se for usar o middleware em alguma rota especifica 
+usersRouter.post("/", usersController.create);
 usersRouter.put("/:id", usersController.update);
 
 module.exports = usersRouter;
