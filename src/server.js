@@ -2,13 +2,19 @@ require("express-async-errors");
 const migrationsRun = require("./database/sqlite/migrations")
 const AppError = require("./utils/AppError")
 const express = require("express"); //importando o express pro arquivo
+const uploadConfig = require("./configs/upload");
 
 const routes = require("./routes"); //se não especificar qual arquivo quer abrir, ele vai abrir sempre o arquivo index
+
+const cors = require("cors")
 
 migrationsRun();
 
 const app = express();
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+
+app.use("/files", express.static(uploadConfig.UPLOADS_FOLDER));
 
 app.use(routes);
 
