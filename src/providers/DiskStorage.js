@@ -12,7 +12,7 @@ class DiskStorage{
     return file;
   }
 
-  async deleteFiles(file0){
+  async deleteFiles(file){
     const filePath = path.resolve(uploadConfig.UPLOADS_FOLDER, file);
 
     try{
