@@ -1,9 +1,15 @@
-const { hash, compare } = require("bcryptjs")
+const { hash, compare } = require("bcryptjs") // hash é a função que vai gerar a criptografia da senha.
 
 const AppError = require("../utils/AppError");
 
-const sqliteConnection = require("../database/sqlite");
+const sqliteConnection = require("../database/sqlite"); // importando a conexão com o banco de dados.
 
+
+/*
+  Controllers
+
+  Quando uma requisição chega no arqui server.js, que é o ponto de entrada da aplicação, passa pelas rotas para que seja identificado qual controller dese ser executado. Após executar a requisição, o controller devolve para a rota, que devolve para o usuário que fez a solicitação através do server.js
+*/
 class UsersController {
   /*
   * index - GET para listar vários registros.
@@ -19,6 +25,7 @@ class UsersController {
     const checkUserExist = await database.get("SELECT * FROM users WHERE email = (?)", [email])
 
     if(checkUserExist){
+      // verifica se o email está um uso.
       throw new AppError("Este email já está cadastrado.");
     }
 
@@ -44,6 +51,7 @@ class UsersController {
   async update(request, response) {
     const {name, email, password, old_password} = request.body;
     const user_id = request.user.id;
+    // não é mais necessário pegar o id do usuário pelo parâmetro, pois agora ele está incorporado nas requisições
 
     const database = await sqliteConnection();
     const user = await database.get("SELECT * FROM users WHERE id = (?)", [user_id]);
@@ -55,18 +63,21 @@ class UsersController {
     const userWithUpdatedEmail = await database.get("SELECT * FROM users WHERE email = (?)", [email]);
 
     if(userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
+      // checando se o usuário está tentando mudar o email para o email existente de outro usuário.
       throw new AppError("Este e-mail já está em uso.")
     }
 
-    user.name = name ?? user.name;
-    user.email = email ?? user.email;
+    user.name = name ?? user.name; // se existir conteúdo dentro de name, utilize, se não, use o user.name(nome existente no banco de dados).
+    user.email = email ?? user.email; // ?? é o nullish coalescing operator aka(operador de coalescência nula -  é um operador lógico que retorna o seu operando do lado direito quando o seu operador do lado esquerdo é null ou undefined. Caso contrário, ele retorna o seu operando do lado esquerdo.)
 
     if(password && !old_password) {
       throw new AppError("A senha antiga é obrigatória para definir uma nova senha");
     }
 
     if(password && old_password) {
+      // se o password(senha nova) e o old_password forem informados, será verificado se a senha antiga é igual à senha cadastrada no banco de dados.
       const checkOldPassword = await compare(old_password, user.password)
+      // necessário usar o compare, pois o old_password está criptografado e o password não está.
 
       if(!checkOldPassword) {
         throw new AppError("A senha antiga é inválida.");
@@ -83,7 +94,7 @@ class UsersController {
       updated_at = DATETIME('now', 'localtime')
       WHERE id = ?`,
       [user.name, user.email, user.password, user_id]
-    );
+    ); // atualiza na tabela de usuários e define os valores indicados.
 
     return response.json();
   }

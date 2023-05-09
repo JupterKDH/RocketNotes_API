@@ -11,6 +11,7 @@ class UserAvatarController{
 
     const user = await knex("users")
     .where({id: user_id}).first();
+    // where({user_id}) se o campo buscado for exatamente o mesmo campo do nome da constante usada como parâmetro da busca.
 
     if(!user){
       throw new AppError("Somente usuários autenticados podem mudar o avatar", 401);

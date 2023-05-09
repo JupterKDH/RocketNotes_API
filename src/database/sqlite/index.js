@@ -1,11 +1,23 @@
-const sqlite3 = require("sqlite3");
-const sqlite = require("sqlite"); //sqlite está instalado, mas as vezes não a palavra sqlite não é reconhecida, porém ainda contínua funcional
-const path = require("path")
+const sqlite3 = require("sqlite3"); // drive que estabelece a conexão com a base de dados.
+const sqlite = require("sqlite"); // responsável por conectar.
+const path = require("path") // resolve os endereços de acordo com o ambiente.
 
-async function sqliteConnection(){
+/*
+    Conexão com banco de dados
+    No momento que a aplicação iniciar, se o arquivo do banco de dados não existir (na primeira vez não vai 
+    existir), vai criar o arquivo de forma automática (não vai criar o conteúdo) possibilitando manipula-lo
+    Caso exista, vai se conectar
+*/
+
+async function sqliteConnection(){ // abrir conexão.
   const database = await sqlite.open({
-    filename: path.resolve(__dirname, "..", "database.db"), // ou seja diretório onde está(__dirname)/para voltar um caminho-pasta ("..")/ e o nome do arquivo a ser criado (filename)
-    driver: sqlite3.Database
+     // passar um objeto com configurações da conexão (onde salvar o arquivo no banco de dados).
+    // filename: "../../database" pode dar problema ao rodar a API em outro sistema operacional.
+    filename: path.resolve(__dirname, "..", "database.db"), 
+    // ou seja diretório onde está(__dirname)/para voltar um caminho-pasta ("..")/ e o nome do arquivo a ser criado (filename).
+    // "database.db" cria um arquivo database.db dentro da pasta database.
+    
+    driver: sqlite3.Database // informando o drive de conexão a ser utilizado
   });
   return database;
 }

@@ -2,12 +2,12 @@ const sqliteConnection = require('../../sqlite')
 const createUsers = require('./createUsers')
 
 async function migrationsRun(){
-  const schemas = [
+  const schemas = [ // tabelas que o banco de dados vai ter.
     createUsers
-  ].join('');
+  ].join(''); // join para juntar todas as migrations usando nada como parâmetro
 
   sqliteConnection()
-  .then(db => db.exec(schemas))
+  .then(db => db.exec(schemas)) // executando as migrations
   .catch(error => console.error(error));
 
 }
