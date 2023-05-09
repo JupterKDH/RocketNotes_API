@@ -1,11 +1,11 @@
 <h1 align="center"> RocketNotes API </h1>
 
-* * * Stage 08/10
+*** Stage 08/10
 
 <h2>Projeto</h2>
 
-API construída utilizando Node.js e Express.
-Usamos Insomnia para fazer os testes de cadastro, rota e errors.
+API construída utilizando Node.js e Express. <br/>
+Usamos Insomnia para fazer os testes de cadastro, rota e errors. <br/>
 Criado um banco de dado do tipo SQLite e manipulando o mesmo usando o Beekeper Studio junto ao Knex.
 
 <h2>Tecnologias</h2>
