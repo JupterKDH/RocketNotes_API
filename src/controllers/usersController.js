@@ -1,8 +1,9 @@
 const { hash, compare } = require("bcryptjs") // hash é a função que vai gerar a criptografia da senha.
-
 const AppError = require("../utils/AppError");
 
+const UserRepository = require("../repositories/UserRepository");
 const sqliteConnection = require("../database/sqlite"); // importando a conexão com o banco de dados.
+const UserCreateService = require("../services/UserCreateService");
 
 
 /*
@@ -21,8 +22,16 @@ class UsersController {
   async create(request, response) {
     const { name, email, password } = request.body;
 
-    const database = await sqliteConnection();
-    const checkUserExist = await database.get("SELECT * FROM users WHERE email = (?)", [email])
+    const userRepository = new UserRepository();
+    const userCreateService = new UserCreateService(userRepository);
+    await userCreateService.execute({ name, email, password });
+
+    /* tudo que tá nesse comentário aqui foi movido para o UserCreateService.
+    const userRepository = new UserRepository;
+
+    //const database = await sqliteConnection();
+    const checkUserExist = await userRepository.findByEmail(email);
+    // await database.get("SELECT * FROM users WHERE email = (?)", [email]) <- esse é o jeito antigo de usar na const anterior: checkUserExist
 
     if(checkUserExist){
       // verifica se o email está um uso.
@@ -30,11 +39,16 @@ class UsersController {
     }
 
     const hashedPassword = await hash(password, 8);
-
+    
+    
     await database.run(
       "INSERT INTO users (name, email, password) VALUES (?, ?, ?)", 
       [ name, email, hashedPassword ]
       );
+    
+
+    await userRepository.create({name, email, password: hashedPassword})
+    */
 
     return response.status(201).json();
 
